@@ -37,9 +37,11 @@ export default function SignUp() {
 			email: data.get('email'),
 			password: data.get('password'),
 			name: data.get('firstName') + ' ' + data.get('lastName'),
+			phone: data.get('phone'),
 		};
 		try {
 			const response = await registerUser(requestBody);
+			console.log(response);
 			if (response.status === 201 || response.status === 200) {
 				setMessage('User registered successfully');
 				setMessageType('success');
@@ -51,8 +53,8 @@ export default function SignUp() {
 			}
 			console.log(response);
 		} catch (error) {
-			console.error(error);
-			setMessage('User registration failed');
+			console.error(error.response.data);
+			setMessage(error.response.data.message || 'Something went wrong');
 			setMessageType('error');
 		}
 	};
@@ -119,6 +121,16 @@ export default function SignUp() {
 									label="Email Address"
 									name="email"
 									autoComplete="email"
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<TextField
+									required
+									fullWidth
+									id="phone"
+									label="Phone"
+									name="phone"
+									autoComplete="phone"
 								/>
 							</Grid>
 							<Grid item xs={12}>

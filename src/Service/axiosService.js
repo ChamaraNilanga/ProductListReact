@@ -17,7 +17,7 @@ const authHeaders = () => {
 };
 
 const registerUser = (requestBody) => {
-  return axios.post(`${BaseUrl}/users/register`, requestBody);
+  return axios.post(`${BaseUrl}/auth/register`, requestBody);
 };
 
 const loginUser = (requestBody) => {
