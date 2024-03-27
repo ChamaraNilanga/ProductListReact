@@ -21,7 +21,7 @@ const registerUser = (requestBody) => {
 };
 
 const loginUser = (requestBody) => {
-  return axios.post(`${BaseUrl}/users/login`, requestBody);
+  return axios.post(`${BaseUrl}/auth/login`, requestBody);
 };
 
 const deletePost = (id) => {

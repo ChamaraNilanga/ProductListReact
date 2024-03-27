@@ -61,7 +61,7 @@ export default function SignIn() {
         if( response.status === 200){
             setMessage('User logged successfully');
             setMessageType('success');
-            setItemsToLocalStorage('token', response.data.data);
+            setItemsToLocalStorage('token', response.data.token);
             setItemsToLocalStorage('userId', response.data.userId);
             setTimeout(() => {
                 setMessage('');
@@ -71,7 +71,7 @@ export default function SignIn() {
         console.log(response);
     } catch (error) {
         console.error(error);
-        setMessage('User logging failed');
+        setMessage(error.response.data.message || 'User login failed');
         setMessageType('error');
     }
   };
