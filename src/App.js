@@ -7,7 +7,6 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-import DashBoard from './Components/DashBoard/DashBoard';
 import  PrivateRoute  from './Components/PrivateRoute/PrivateRoute';
 import PublicRoute from './Components/PrivateRoute/PublicRoute';
 import Profile from './Components/Profile/Profile';
@@ -30,15 +29,7 @@ function App() {
                 <SignUp />
               </PublicRoute>
               } />
-            <Route path="/dashboard" element={
-                <PrivateRoute>
-                  <DashBoard />
-                </PrivateRoute>
-						}/>
             <Route path="/profile" element={<Profile/>}/>
-            {/* <Route element={<PrivateRoute />}>
-                <Route path="/dashboard" element={<DashBoard/>} />
-            </Route> */}
           </Routes>
         </UserProvider>
       </Router>

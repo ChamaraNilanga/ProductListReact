@@ -1,10 +1,6 @@
 import axios from "axios";
 
-const BaseUrl = "https://842a-43-252-15-89.ngrok-free.app/api";
-const addDetailsUrl =
-  "https://842a-43-252-15-89.ngrok-free.app/api/buses/add-bus";
-const getDetailsUrl =
-  "https://842a-43-252-15-89.ngrok-free.app/api/buses/";
+const BaseUrl = "http://localhost:8000/api";
 
 const token = localStorage.getItem("token");
 console.log("TOKEN : ", token);
@@ -32,14 +28,6 @@ const deletePost = (id) => {
   return axios.delete(`${BaseUrl}/admin/location/${id}`);
 };
 
-const addDetails = (requestBody) => {
-  return axios.post(addDetailsUrl, requestBody, { headers: headers });
-};
-
-const getDetails = () => {
-  return axios.get(getDetailsUrl, { headers: headers });
-};
-
 const deleteDetails =(id) => {
   return axios.delete(`${BaseUrl}/buses/${id}` , { headers: headers });
 }
@@ -48,4 +36,4 @@ const updateDetails = (id, requestBody) => {
   return axios.put(`${BaseUrl}/buses/${id}`, requestBody, { headers: headers });
 };
 
-export { registerUser, loginUser, deletePost, addDetails, getDetails ,deleteDetails , updateDetails};
+export { registerUser, loginUser, deletePost ,deleteDetails , updateDetails};
