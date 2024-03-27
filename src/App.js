@@ -18,7 +18,7 @@ function App() {
         <UserProvider>
           <Routes>
             
-            <Route path="/login" element={
+            <Route path="/" element={
               <PublicRoute>
                 <LoginForm />
               </PublicRoute>
