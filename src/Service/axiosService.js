@@ -36,4 +36,9 @@ const updateDetails = (id, requestBody) => {
   return axios.put(`${BaseUrl}/buses/${id}`, requestBody, { headers: headers });
 };
 
-export { registerUser, loginUser, deletePost ,deleteDetails , updateDetails};
+const addProduct = (requestBody) => {
+  console.log("Request Body : ", requestBody);
+  return axios.post(`${BaseUrl}/products`, requestBody, {headers:headers});
+};
+
+export { registerUser, loginUser, deletePost ,deleteDetails ,addProduct, updateDetails};

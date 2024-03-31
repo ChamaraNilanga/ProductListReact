@@ -10,6 +10,8 @@ import {
 import  PrivateRoute  from './Components/PrivateRoute/PrivateRoute';
 import PublicRoute from './Components/PrivateRoute/PublicRoute';
 import Profile from './Components/Profile/Profile';
+import { Dashboard } from '@mui/icons-material';
+import PositionedMenu from './Components/DashBoard/DashBoard';
 
 function App() {
   return (
@@ -29,6 +31,11 @@ function App() {
                 <SignUp />
               </PublicRoute>
               } />
+              <Route path="/dashboard" element={
+                <PrivateRoute>
+                  <PositionedMenu />
+                </PrivateRoute>
+						}/>
             <Route path="/profile" element={<Profile/>}/>
           </Routes>
         </UserProvider>

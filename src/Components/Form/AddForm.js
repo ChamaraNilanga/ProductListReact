@@ -13,16 +13,15 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Copyright from "../../CopyRight/CopyRight";
-import { addDetails, registerUser, updateDetails } from "../../Service/axiosService";
+import {  addProduct, registerUser, updateDetails } from "../../Service/axiosService";
 import Alert from "@mui/material/Alert";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CheckCircleOutline } from "@mui/icons-material";
 import { useUserContext } from "../../ContextApi/UserContext";
-import BasicDatePicker from "../DatePicker/DatePicker";
-import BasicTable from "../Table/TableComponent";
+// import BasicDatePicker from "../DatePicker/DatePicker";
+import FileUploadField from "../FileUpload/FileUploadField";
 import { useEffect } from "react";
-import dayjs from "dayjs";
 const defaultTheme = createTheme();
 
 export default function AddForm(props) {
@@ -32,32 +31,39 @@ export default function AddForm(props) {
   const { userName, setUserName } = useUserContext();
   const initialStates = {
             name: "",
-            number: "",
-            capacity: 0,
-            from: "",
-            to: "",
-            journeyDate: "",
-            depature: "",
-            arrival: "",
-            type: "",
-            fare: 0,
-            seatsBooked: [],
-            status: "",
+            description: "",
+            size: 0,
+            price: 0,
+            color: "",
+            category: "",
+            image: "",
             createdAt: "",
             updatedAt: "",
             __v: 0
   };
   const [updateData,setUpdateData] = useState(updateBusRow.length > 0 ? updateBusRow[0] : initialStates);
-  const [journeyDate,setJourneyDate] = useState(dayjs().format('MM/DD/YYYY'));
-  const [depature,setDepature] = useState(dayjs().format('MM/DD/YYYY'));
-  console.log("Journey Date : ", updateData.length);
+  // const [journeyDate,setJourneyDate] = useState(dayjs().format('MM/DD/YYYY'));
+  // const [depature,setDepature] = useState(dayjs().format('MM/DD/YYYY'));
+  // console.log("Journey Date : ", updateData.length);
 
   const onChanges = (event) => {
-    setUpdateData({ ...updateData, [event.target.name]: event.target.value });
+    console.log("Event : ", event.target.value);
+    setUpdateData((prevData) => ({
+      ...prevData,
+      [event.target.name]: event.target.value
+    }));
     console.log(updateData);
   };
 
-
+  const onFileChange = (event) => {
+    console.log("EventNew : ", event.target.files[0]);
+    setUpdateData((prevData) => ({
+      ...prevData,
+      [event.target.name]: event.target.files[0]
+    }));
+    console.log(updateData);
+};
+  
 
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
@@ -65,21 +71,18 @@ export default function AddForm(props) {
     const data = new FormData(event.currentTarget);
     console.log(data);
     const requestBody = {
-      capacity: parseInt(data.get("capacity")),
-      number: data.get("number"),
       name: data.get("name"),
-      from: data.get("from"),
-      to: data.get("to"),
-      journeyDate: data.get("journeyDate"),
-      depature: data.get("depature"),
-      arrival: data.get("arrival"),
-      type: data.get("type"),
-      fare: parseInt(data.get("fare")),
+      description: data.get("description"),
+      size: data.get("size"),
+      price: data.get("price"),
+      color: data.get("color"),
+      category: data.get("category"),
+      image: data.get("image"),
     };
     console.log(requestBody);
     try {
       if(!updateData._id){
-      const response = await addDetails(requestBody);
+      const response = await addProduct(requestBody);
       if (response.status === 201 || response.status === 200) {
         setMessage("Details Added successfully");
         setBusList((prevData)=>[...prevData, {...requestBody , 
@@ -112,7 +115,7 @@ export default function AddForm(props) {
       }}
     } catch (error) {
       console.error(error);
-      setMessage("Details not added");
+      setMessage(error.response.data.message);
       setMessageType("error");
     }
   };
@@ -146,6 +149,7 @@ export default function AddForm(props) {
         >
           <Box
             component="form"
+            encType="multipart/form-data"
             noValidate
             onSubmit={handleSubmit}
             sx={{ mt: 3 }}
@@ -159,7 +163,7 @@ export default function AddForm(props) {
                   fullWidth
                   id="name"
                   label="Name"
-                  value={updateData._id ? updateData.name : ""}
+                  value={updateData ? updateData.name : ""}
                   onChange={(e)=>onChanges(e)}
                   autoFocus
                 />
@@ -168,22 +172,11 @@ export default function AddForm(props) {
                 <TextField
                   required
                   fullWidth
-                  id="number"
-                  label="Number"
-                  name="number"
-                  value={updateData._id? updateData.number : ""}
-                  autoComplete="family-name"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="capacity"
-                  label="Capacity"
-                  name="capacity"
-                  value={updateData._id? updateData.capacity : ""}
-                  autoComplete="email"
+                  id="size"
+                  label="Size"
+                  name="size"
+                  value={updateData? updateData.size : ""}
+                  onChange={(e)=>onChanges(e)}
                   type="number"
                 />
               </Grid>
@@ -191,61 +184,53 @@ export default function AddForm(props) {
                 <TextField
                   required
                   fullWidth
-                  name="from"
-                  label="From"
-                  type="text"
-                  value={updateData._id? updateData.from : ""}
-                  id="from"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  name="to"
-                  label="To"
-                  value={updateData._id? updateData.to : ""}
-                  type="text"
-                  id="to"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <BasicDatePicker text={"Journey Date"} name={"journeyDate"} defaultValue={updateData._id? updateData.journeyDate : journeyDate}/>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <BasicDatePicker value={"30/03/2024"} text={"Depature Date"} name={"depature"} defaultValue={updateData._id? updateData.depature : depature}/>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  name="arrival"
-                  label="Arrival"
-                  type="text"
-                  value={updateData._id? updateData.arrival : ""}
-                  id="arrival"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  name="type"
-                  label="Type"
-                  type="text"
-                  value={updateData._id? updateData.type : ""}
-                  id="type"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  name="fare"
-                  label="Fare"
+                  id="price"
+                  label="Price"
+                  name="price"
+                  value={updateData? updateData.price : ""}
+                  onChange={(e)=>onChanges(e)}
                   type="number"
-                  value={updateData._id? updateData.fare : ""}
-                  id="fare"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  name="color"
+                  label="Color"
+                  type="text"
+                  value={updateData? updateData.color : ""}
+                  onChange={(e)=>onChanges(e)}
+                  id="color"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  name="category"
+                  label="Category"
+                  value={updateData? updateData.category : ""}
+                  onChange={(e)=>onChanges(e)}
+                  type="text"
+                  id="category"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FileUploadField onFileChange={onFileChange}/>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="description"
+                  label="Description"
+                  type="text-area"
+                  value={updateData? updateData.description : ""}
+                  onChange={(e)=>onChanges(e)}
+                  id="description"
+                  multiline
+                  rows={4}
                 />
               </Grid>
             </Grid>
